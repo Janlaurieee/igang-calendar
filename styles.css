@@ -505,10 +505,10 @@ footer { margin-top: 32px; border-top: 1px solid var(--line); background: #fff; 
 }
 .footer-emblem img {
   position: absolute;
-  width: 72px; height: 72px;
+  width: auto; height: 80px;
   max-width: none;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);
+  left: 0; top: 50%;
+  transform: translateY(-50%);
 }
 .footer-meta { margin-left: auto; }
 
@@ -665,10 +665,10 @@ label textarea { resize: vertical; }
   }
   .brand-emblem img {
     position: absolute;
-    width: 72px; height: 72px;
+    width: auto; height: 80px;
     max-width: none;
-    left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
+    left: 0; top: 50%;
+    transform: translateY(-50%);
   }
   .brand-calendar { font-size: 1.15rem; }
 
