@@ -151,7 +151,6 @@ const elements = {
   noteDesc: document.getElementById('noteDesc'),
   noteTime: document.getElementById('noteTime'),
   noteCategory: document.getElementById('noteCategory'),
-  clearAllNotesBtn: document.getElementById('clearAllNotes'),
   toast: document.getElementById('toast'),
   navLinks: document.querySelectorAll('.nav-link'),
   calendarMain: document.querySelector('.calendar-card'),
@@ -835,14 +834,6 @@ function attachEventListeners() {
     saveNotes();
     elements.noteModal.classList.remove('open');
     showToast('Note saved successfully');
-  };
-  
-  elements.clearAllNotesBtn.onclick = () => {
-    if(confirm("Are you sure you want to delete all notes? This cannot be undone.")) {
-      notesData = {};
-      saveNotes();
-      showToast('All notes cleared');
-    }
   };
   
   elements.navLinks.forEach(l => {
