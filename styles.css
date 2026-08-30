@@ -108,23 +108,20 @@ header {
   justify-content: space-between;
   gap: 16px;
 }
-.brand { display: flex; align-items: center; gap: 12px; }
-.brand-logo {
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(244,118,11,.25);
-  flex-shrink: 0;
-}
-.brand-title { font-weight: 800; letter-spacing: .06em; font-size: .95rem; line-height: 1; }
-.brand-sub {
-  font-family: "Newsreader", serif;
-  font-size: 1.3rem;
-  line-height: 1;
-  margin-top: 2px;
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand-wordmark {
   display: block;
-  color: #3a2a12;
+  width: clamp(230px, 20vw, 320px);
+  height: auto;
+  border-radius: 8px;
 }
-
+.brand-emblem { display: none; }
+.brand-calendar {
+  font-family: "Newsreader", serif;
+  font-size: 1.15rem;
+  color: #3a2a12;
+  white-space: nowrap;
+}
 .top-nav { display: flex; align-items: center; gap: 6px; }
 .nav-divider { width: 1px; height: 24px; background: var(--line); margin: 0 4px; }
 .nav-link {
@@ -498,7 +495,21 @@ footer { margin-top: 32px; border-top: 1px solid var(--line); background: #fff; 
   padding: 18px 24px;
   display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
 }
-.footer-logo { width: 34px; height: 34px; border-radius: 10px; }
+.footer-emblem {
+  position: relative;
+  width: 40px; height: 40px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  flex-shrink: 0;
+}
+.footer-emblem img {
+  position: absolute;
+  width: 72px; height: 72px;
+  max-width: none;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+}
 .footer-meta { margin-left: auto; }
 
 /* =====================
@@ -641,9 +652,25 @@ label textarea { resize: vertical; }
    ===================== */
 @media (max-width: 768px) {
   .header-inner { padding: 10px 14px; }
-  .brand-logo { width: 38px; height: 38px; }
-  .brand-title { font-size: .82rem; }
-  .brand-sub { font-size: 1.1rem; }
+  .brand-wordmark { display: none; }
+  .brand-emblem {
+    display: block;
+    position: relative;
+    width: 40px; height: 40px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(244,118,11,.2);
+    flex-shrink: 0;
+  }
+  .brand-emblem img {
+    position: absolute;
+    width: 72px; height: 72px;
+    max-width: none;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .brand-calendar { font-size: 1.15rem; }
 
   .layout {
     padding: 0 10px;
@@ -718,8 +745,7 @@ label textarea { resize: vertical; }
    SMALL PHONES (max 480px)
    ===================== */
 @media (max-width: 480px) {
-  .brand-title { display: none; }
-  .brand-sub { font-size: 1rem; }
+  .brand-calendar { font-size: 1rem; }
 
   .calendar-title { font-size: 1.3rem; }
   .select { padding: 6px 8px; font-size: .8rem; }
