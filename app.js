@@ -149,6 +149,7 @@ const elements = {
   mobileMenu: document.getElementById('mobileMenu'),
   mobileNav: document.getElementById('mobileNav'),
   searchBtn: document.getElementById('searchBtn'),
+  searchBtnMobile: document.getElementById('searchBtnMobile'),
   searchOverlay: document.getElementById('searchOverlay'),
   closeSearch: document.getElementById('closeSearch'),
   searchInput: document.getElementById('searchInput'),
@@ -828,6 +829,10 @@ function attachEventListeners() {
   };
   
   elements.searchBtn.onclick = openSearch;
+  elements.searchBtnMobile.onclick = () => {
+    elements.mobileNav.classList.remove('open');
+    openSearch();
+  };
   elements.closeSearch.onclick = closeSearch;
   elements.searchInput.oninput = (e) => handleSearch(e.target.value);
 }
