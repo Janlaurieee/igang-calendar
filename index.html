@@ -79,6 +79,7 @@
       <button class="chip" data-filter="holiday">Holidays</button>
       <button class="chip" data-filter="international">International</button>
       <button class="chip" data-filter="journalism">Journalism</button>
+      <button class="chip" data-filter="academic">Academic</button>
       <button class="chip" data-filter="birthday">🎂 Birthdays</button>
       <button class="chip" data-filter="personal">Notes</button>
       <label class="toggle"><input type="checkbox" id="toggleBirthdays" checked><span>Show birthdays</span></label>
@@ -97,6 +98,7 @@
       <span><i class="dot d-working"></i> Special Working</span>
       <span><i class="dot d-intl"></i> International</span>
       <span><i class="dot d-journalism"></i> Journalism / Media</span>
+      <span><i class="dot d-academic"></i> ISUFST Academic</span>
       <span><i class="dot d-birthday"></i> Staffer Birthday</span>
       <span><i class="dot d-personal"></i> Personal Note</span>
     </div>
@@ -143,16 +145,6 @@
         <span>View the complete holiday guide</span>
       </span>
       <svg class="resource-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
-    </a>
-
-    <a class="card holiday-resource academic-resource" href="assets/ISUFST-Academic-Calendar-AY-2026-2027.docx" download aria-label="Download the ISUFST Academic Calendar for academic year 2026 to 2027">
-      <span class="resource-icon" aria-hidden="true">🎓</span>
-      <span class="resource-copy">
-        <span class="eyebrow">ACADEMIC CALENDAR</span>
-        <strong>ISUFST AY 2026–2027</strong>
-        <span>Download the complete official calendar</span>
-      </span>
-      <svg class="resource-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
     </a>
 
     <div class="card mini-card">
@@ -235,6 +227,7 @@
 
 <div id="toast" class="toast"></div>
 
+<script src="academic-events.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

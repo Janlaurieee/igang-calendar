@@ -331,6 +331,7 @@ header {
 .pill.working { background: #fff9db; color: #7a5c00; border-color: #ffe9a8; }
 .pill.intl { background: #eef4ff; color: #2347a8; border-color: #d0ddff; }
 .pill.journalism { background: linear-gradient(135deg,#ff8c42,#f4760b); color: #fff; }
+.pill.academic { background: #e9f8f1; color: #146c43; border-color: #b8e7d1; }
 .pill.birthday { background: linear-gradient(135deg,#FFD15C,#FFC23D); color: #4a2d00; border-color: #ffdf8a; }
 .pill.personal { background: #f6f1eb; color: #5a4a3a; border-color: #ede0cc; }
 .pill.more { background: #252525; color: #fff; text-align: center; }
@@ -356,6 +357,7 @@ header {
 .d-working { background: #ffcc4d; }
 .d-intl { background: #4a90e2; }
 .d-journalism { background: linear-gradient(135deg,#ff9418,#f4760b); }
+.d-academic { background: #2aa876; }
 .d-birthday { background: linear-gradient(135deg,#ffd15c,#ffc23d); }
 .d-personal { background: #c9b8a3; }
 
@@ -495,10 +497,6 @@ header {
 .resource-copy strong { font-size: .88rem; }
 .resource-copy > span:last-child { margin-top: 3px; color: var(--muted); font-size: .74rem; }
 .resource-arrow { margin-left: auto; flex-shrink: 0; color: var(--deep); }
-.academic-resource .resource-icon { background: #eef4ff; }
-.academic-resource .resource-arrow { color: #2347a8; }
-.academic-resource:hover { border-color: #8eabef; }
-
 /* Mini card */
 .mini-card { padding: 12px 16px; }
 

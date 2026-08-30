@@ -189,11 +189,12 @@ function getDateString(year, month, day) {
   return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
 
-function getEventsForDate(month, day) {
+function getEventsForDate(year, month, day) {
   const h = HOLIDAYS.filter(x => x.month === month && x.day === day).map(x => ({ ...x, group: 'holiday' }));
   const o = OBSERVANCES.filter(x => x.month === month && x.day === day).map(x => ({ ...x, group: 'observance' }));
   const b = showBirthdays ? STAFF_BIRTHDAYS.filter(x => x.month === month && x.day === day).map(x => ({ ...x, group: 'birthday' })) : [];
-  return [...h, ...o, ...b];
+  const a = ACADEMIC_EVENTS.filter(x => x.year === year && x.month === month && day >= x.day && day <= x.endDay);
+  return [...h, ...o, ...a, ...b];
 }
 
 function getNotesForDate(dateStr) {
@@ -269,7 +270,7 @@ function updateCalendar() {
     cell.appendChild(dayHead);
 
     // Fetch Events & Notes
-    let events = getEventsForDate(cellMonth, cellDay);
+    let events = getEventsForDate(cellYear, cellMonth, cellDay);
     let notes = getNotesForDate(dateStr);
 
     // Filter
@@ -281,6 +282,9 @@ function updateCalendar() {
       notes = [];
     } else if (activeFilter === 'journalism') {
       events = events.filter(e => e.group === 'observance' && e.type === 'journalism');
+      notes = [];
+    } else if (activeFilter === 'academic') {
+      events = events.filter(e => e.group === 'academic');
       notes = [];
     } else if (activeFilter === 'birthday') {
       events = events.filter(e => e.group === 'birthday');
@@ -300,6 +304,7 @@ function updateCalendar() {
       if(e.type === 'working') pillClass = 'working';
       if(e.type === 'intl') { pillClass = 'intl'; icon = '🔵'; }
       if(e.type === 'journalism') { pillClass = 'journalism'; icon = '📝'; }
+      if(e.type === 'academic') { pillClass = 'academic'; icon = '🎓'; }
       if(e.group === 'birthday') { pillClass = 'birthday'; icon = '🎂'; }
       
       combined.push({ text: `${icon} ${e.name ? e.name + "'s Birthday" : e.title}`, class: pillClass, obj: e });
@@ -319,7 +324,7 @@ function updateCalendar() {
       // Stop propagation so clicking pill can open specific details
       pill.addEventListener('click', (e) => {
         e.stopPropagation();
-        if(item.obj.group === 'holiday' || item.obj.group === 'observance') {
+        if(item.obj.group === 'holiday' || item.obj.group === 'observance' || item.obj.group === 'academic') {
           openEventModal(item.obj);
         } else if(item.obj.group === 'birthday') {
           openEventModal({ ...item.obj, title: `${item.obj.name}'s Birthday`, desc: "Happy Birthday from The Igang Publication!", type: 'birthday' });
@@ -364,7 +369,7 @@ function updateSidebar() {
   elements.todayWeekday.textContent = WEEKDAYS[td.getDay()];
   elements.todayBadge.textContent = td.getDate();
   
-  let events = getEventsForDate(td.getMonth(), td.getDate());
+  let events = getEventsForDate(td.getFullYear(), td.getMonth(), td.getDate());
   let notes = getNotesForDate(dateStr);
   
   // Highlight birthdays prominently
@@ -387,6 +392,7 @@ function updateSidebar() {
       let badge = 'Event';
       if(e.group === 'holiday') badge = 'Holiday';
       if(e.type === 'journalism') badge = 'Journalism';
+      if(e.group === 'academic') badge = 'Academic';
       if(e.group === 'birthday') badge = 'Birthday';
       
       div.innerHTML = `
@@ -415,7 +421,7 @@ function updateSidebar() {
   let count = 0;
   for(let i = 1; i <= 30; i++) {
     let d = new Date(td.getFullYear(), td.getMonth(), td.getDate() + i);
-    let eList = getEventsForDate(d.getMonth(), d.getDate());
+    let eList = getEventsForDate(d.getFullYear(), d.getMonth(), d.getDate());
     
     eList.forEach(e => {
       if(count < 6) { // Limit to 6
@@ -428,7 +434,7 @@ function updateSidebar() {
           </div>
           <div>
             <div class="upcoming-title">${e.name ? e.name + "'s Birthday" : e.title}</div>
-            <div class="upcoming-sub">${e.type === 'journalism' ? 'Journalism & Media' : e.group === 'holiday' ? 'Philippine Holiday' : e.group === 'birthday' ? 'Staffer Birthday' : 'Observance'}</div>
+            <div class="upcoming-sub">${e.group === 'academic' ? 'ISUFST Academic Calendar' : e.type === 'journalism' ? 'Journalism & Media' : e.group === 'holiday' ? 'Philippine Holiday' : e.group === 'birthday' ? 'Staffer Birthday' : 'Observance'}</div>
           </div>
         `;
         elements.upcomingList.appendChild(div);
@@ -457,7 +463,8 @@ function renderDrawerContent(dateStr) {
   const month = parseInt(parts[1]) - 1;
   const day = parseInt(parts[2]);
   
-  const events = getEventsForDate(month, day);
+  const year = parseInt(parts[0]);
+  const events = getEventsForDate(year, month, day);
   const notes = getNotesForDate(dateStr);
   
   elements.drawerEvents.innerHTML = '';
@@ -472,6 +479,7 @@ function renderDrawerContent(dateStr) {
       let badge = 'Event';
       if(e.group === 'holiday') badge = 'Holiday';
       if(e.type === 'journalism') badge = 'Journalism';
+      if(e.group === 'academic') badge = 'Academic';
       if(e.group === 'birthday') badge = 'Birthday';
       
       div.innerHTML = `
@@ -481,7 +489,7 @@ function renderDrawerContent(dateStr) {
         </div>
       `;
       div.onclick = () => {
-        if(e.group === 'holiday' || e.group === 'observance') openEventModal(e);
+        if(e.group === 'holiday' || e.group === 'observance' || e.group === 'academic') openEventModal(e);
         if(e.group === 'birthday') openEventModal({ ...e, title: `${e.name}'s Birthday`, desc: "Happy Birthday from The Igang Publication!", type: 'birthday' });
       }
       elements.drawerEvents.appendChild(div);
@@ -550,10 +558,12 @@ function openEventModal(e) {
   if(e.type === 'intl') typeLabel = "International Observance";
   if(e.type === 'journalism') typeLabel = "Journalism & Media";
   if(e.type === 'birthday') typeLabel = "Staffer Birthday";
+  if(e.type === 'academic') typeLabel = "ISUFST Academic Calendar";
   if(e.customBadge) typeLabel = e.customBadge;
   
   elements.eventModalBadge.textContent = typeLabel;
-  elements.eventModalMeta.textContent = `${MONTH_NAMES[e.month]} ${e.day}`;
+  const range = e.endDay && e.endDay !== e.day ? `–${e.endDay}` : '';
+  elements.eventModalMeta.textContent = `${MONTH_NAMES[e.month]} ${e.day}${range}${e.year ? `, ${e.year}` : ''}`;
   elements.eventModalDesc.textContent = e.desc;
   
   elements.eventModal.classList.add('open');
@@ -610,11 +620,12 @@ function renderEventsList() {
   elements.eventsListView.innerHTML = '<h3>Events & Observances</h3><div class="search-results"></div>';
   const container = elements.eventsListView.querySelector('.search-results');
   
-  const allEvents = [...HOLIDAYS, ...OBSERVANCES, ...STAFF_BIRTHDAYS].map(e => ({
+  const allEvents = [...ACADEMIC_EVENTS, ...HOLIDAYS, ...OBSERVANCES, ...STAFF_BIRTHDAYS].map(e => ({
     ...e,
     title: e.name ? `${e.name}'s Birthday` : e.title,
     group: e.name ? 'birthday' : e.group
   })).sort((a,b) => {
+    if((a.year || 0) !== (b.year || 0)) return (a.year || 0) - (b.year || 0);
     if(a.month !== b.month) return a.month - b.month;
     return a.day - b.day;
   });
@@ -625,9 +636,9 @@ function renderEventsList() {
     item.innerHTML = `
       <div>
         <b>${e.title}</b>
-        <span>${MONTH_NAMES[e.month]} ${e.day}</span>
+        <span>${MONTH_NAMES[e.month]} ${e.day}${e.endDay && e.endDay !== e.day ? `–${e.endDay}` : ''}${e.year ? `, ${e.year}` : ''}</span>
       </div>
-      <span class="badge">${e.type === 'journalism' ? 'Journalism' : e.group === 'holiday' ? 'Holiday' : e.group === 'birthday' ? 'Birthday' : 'Observance'}</span>
+      <span class="badge">${e.group === 'academic' ? 'Academic' : e.type === 'journalism' ? 'Journalism' : e.group === 'holiday' ? 'Holiday' : e.group === 'birthday' ? 'Birthday' : 'Observance'}</span>
     `;
     item.onclick = () => openEventModal({ ...e, desc: e.desc || "Happy Birthday from The Igang Publication!" });
     container.appendChild(item);
@@ -671,7 +682,7 @@ function handleSearch(q) {
   if(!q) return;
   
   // Search Events
-  const allEvents = [...HOLIDAYS, ...OBSERVANCES, ...STAFF_BIRTHDAYS].map(e => ({
+  const allEvents = [...ACADEMIC_EVENTS, ...HOLIDAYS, ...OBSERVANCES, ...STAFF_BIRTHDAYS].map(e => ({
     ...e,
     title: e.name ? `${e.name}'s Birthday` : e.title,
     group: e.name ? 'birthday' : e.group
@@ -681,8 +692,8 @@ function handleSearch(q) {
     const item = document.createElement('div');
     item.className = 'search-item';
     item.innerHTML = `
-      <div><b>${e.title}</b> <span>${MONTH_NAMES[e.month]} ${e.day}</span></div>
-      <span class="badge">${e.group === 'birthday' ? 'Birthday' : 'Event'}</span>
+      <div><b>${e.title}</b> <span>${MONTH_NAMES[e.month]} ${e.day}${e.endDay && e.endDay !== e.day ? `–${e.endDay}` : ''}${e.year ? `, ${e.year}` : ''}</span></div>
+      <span class="badge">${e.group === 'academic' ? 'Academic' : e.group === 'birthday' ? 'Birthday' : 'Event'}</span>
     `;
     item.onclick = () => { closeSearch(); openEventModal({ ...e, desc: e.desc || "Happy Birthday!" }); }
     elements.searchResults.appendChild(item);
