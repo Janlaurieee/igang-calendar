@@ -862,3 +862,11 @@ label textarea { resize: vertical; }
   }
   .search-sheet { width: 100%; border-radius: 16px; }
 }
+
+/* Keep every date box at the same 1:1 proportion on all screen sizes. */
+.calendar-grid { grid-auto-rows: 1fr; }
+.day {
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  overflow: hidden;
+}
