@@ -183,7 +183,7 @@ function saveNotes() {
   updateCalendar();
   updateSidebar();
   if (elements.drawer.classList.contains('open')) {
-    renderDrawerContent(elements.drawerDateHead.dataset.date);
+    renderDrawerContent(elements.drawer.dataset.date);
   }
 }
 
