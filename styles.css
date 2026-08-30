@@ -495,6 +495,9 @@ header {
 .resource-copy strong { font-size: .88rem; }
 .resource-copy > span:last-child { margin-top: 3px; color: var(--muted); font-size: .74rem; }
 .resource-arrow { margin-left: auto; flex-shrink: 0; color: var(--deep); }
+.academic-resource .resource-icon { background: #eef4ff; }
+.academic-resource .resource-arrow { color: #2347a8; }
+.academic-resource:hover { border-color: #8eabef; }
 
 /* Mini card */
 .mini-card { padding: 12px 16px; }
